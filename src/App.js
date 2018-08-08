@@ -23,9 +23,17 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    //On mount, fetch blogs
     blogService.getAll().then(blogs =>
       this.setState({ blogs })
     )
+    const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
+
+    if(loggedInUserJSON){
+      const userData = JSON.parse(loggedInUserJSON)
+      this.setState({loggedUser: userData})
+    }
+
   }
 
   //Event listeners
@@ -36,22 +44,35 @@ class App extends React.Component {
     })
   }
 
+  logoutHandler = (event) => {
+    //Clear the current user from app state and localStorage
+    window.localStorage.removeItem('loggedInUser')
+    this.setState( { loggedUser: null } )
+  }
+
   submitLogin = async (event) => {
 
     event.preventDefault()
 
-    const loginData = await loginService.loginUser(this.state.credidentials)
+    //try-catch for login errors
+    try {
 
-    this.setState({
-      credidentials: {
-        username: "",
-        password: ""
-      },
-      loggedUser: loginData
-    })
+      const loginData = await loginService.loginUser(this.state.credidentials)
 
-    console.log(loginData);
+      //If succesful login, set user information to localStorage
+      window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
 
+      this.setState({
+        credidentials: { username: "", password: "" },
+        loggedUser: loginData
+      })
+
+      //console.log(loginData)
+
+    } catch (err) {
+      //Maybe display errors to user via notifications? Now just console.log
+      console.log(err)
+    }
   }
 
   render() {
@@ -60,7 +81,10 @@ class App extends React.Component {
 
       return (
         <div>
-        <p>Logged in as {this.state.loggedUser.name}</p>
+          <p>
+            Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
+          </p>
+        
           <h2>blogs</h2>
           {this.state.blogs.map(blog =>
             <Blog key={blog.id} blog={blog}/>
