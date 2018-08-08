@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 
 //My components
 import LoginForm from './components/LoginForm'
+import NewBlogForm from './components/NewBlogForm'
 
 //My services
 import loginService from './services/login'
@@ -18,7 +19,6 @@ class App extends React.Component {
         password: ""
       },
       loggedUser : null
-
     }
   }
 
@@ -32,11 +32,13 @@ class App extends React.Component {
     if(loggedInUserJSON){
       const userData = JSON.parse(loggedInUserJSON)
       this.setState({loggedUser: userData})
+      blogService.setToken(userData.token)
     }
 
   }
 
-  //Event listeners
+  /* -- Event listeners -- */
+
   loginFieldHandler = (event) => {
     //Set state of credidentials, using spread syntax and computed values. Pretty c00l!!
     this.setState({
@@ -49,6 +51,11 @@ class App extends React.Component {
     window.localStorage.removeItem('loggedInUser')
     this.setState( { loggedUser: null } )
   }
+
+  addToBlogs = (newBlog) => {
+    this.setState( { blogs: this.state.blogs.concat(newBlog) } )
+  }
+
 
   submitLogin = async (event) => {
 
@@ -84,7 +91,7 @@ class App extends React.Component {
           <p>
             Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
           </p>
-        
+          <NewBlogForm addBlog={this.addToBlogs} />
           <h2>blogs</h2>
           {this.state.blogs.map(blog =>
             <Blog key={blog.id} blog={blog}/>

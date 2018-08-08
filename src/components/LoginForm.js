@@ -1,13 +1,12 @@
 import React from 'react'
 
-
 const LoginForm = ({submitLogin, credidentials, formInputHandler}) => {
 
   return (
 
     <form onSubmit={submitLogin}>
       <div>
-        käyttäjätunnus
+        Username
         <input
           type="text"
           name="username"
@@ -16,7 +15,7 @@ const LoginForm = ({submitLogin, credidentials, formInputHandler}) => {
         />
       </div>
       <div>
-        salasana
+        Password
         <input
           type="password"
           name="password"
@@ -24,7 +23,7 @@ const LoginForm = ({submitLogin, credidentials, formInputHandler}) => {
           onChange={formInputHandler}
         />
       </div>
-      <button type="submit">kirjaudu</button>
+      <button type="submit">Login</button>
     </form>
 
   )
