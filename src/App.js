@@ -5,9 +5,13 @@ import blogService from './services/blogs'
 //My components
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
+import Notification from './components/Notification'
 
 //My services
 import loginService from './services/login'
+
+//Styles
+import './app.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +22,8 @@ class App extends React.Component {
         username: "",
         password: ""
       },
-      loggedUser : null
+      loggedUser : null,
+      notification: {message: null, style: null}
     }
   }
 
@@ -28,6 +33,11 @@ class App extends React.Component {
       this.setState({ blogs })
     )
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
+
+    // if(loggedInUserJSON === "undefined" || "null"){
+    //   // console.log("nullia tai undefined");
+    //   return window.localStorage.removeItem('loggedInUser')
+    // }
 
     if(loggedInUserJSON){
       const userData = JSON.parse(loggedInUserJSON)
@@ -49,11 +59,27 @@ class App extends React.Component {
   logoutHandler = (event) => {
     //Clear the current user from app state and localStorage
     window.localStorage.removeItem('loggedInUser')
-    this.setState( { loggedUser: null } )
+    this.setState( {
+      loggedUser: null ,
+      notification: {message: "Logout!", style: "notification-success"}
+    })
+    this.notificationTimeout(5000)
   }
 
   addToBlogs = (newBlog) => {
     this.setState( { blogs: this.state.blogs.concat(newBlog) } )
+  }
+
+  setNotification = (notification, sec) => {
+    this.setState( { notification } )
+    this.notificationTimeout(sec)
+  }
+
+  notificationTimeout(sec){
+    setTimeout((sec) => {
+      console.log("timeout");
+      this.setState({notification: {message: null, style: null}})
+      }, sec)
   }
 
 
@@ -71,27 +97,37 @@ class App extends React.Component {
 
       this.setState({
         credidentials: { username: "", password: "" },
-        loggedUser: loginData
+        loggedUser: loginData,
+        notification: {message: "Login success!", style: "notification-success"}
       })
+      this.notificationTimeout(5000)
 
       //console.log(loginData)
 
     } catch (err) {
       //Maybe display errors to user via notifications? Now just console.log
-      console.log(err)
+      console.log(err.response)
+      // console.log(err.status)
+      this.setState({
+        credidentials: { username: "", password: "" },
+        notification: {message: `Login failed, ${err.response.data.error}`, style: "notification-error"}
+      })
+      this.notificationTimeout(5000)
     }
   }
 
   render() {
 
+
     if(this.state.loggedUser){
 
       return (
         <div>
+          <Notification notification={this.state.notification} />
           <p>
             Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
           </p>
-          <NewBlogForm addBlog={this.addToBlogs} />
+          <NewBlogForm addBlog={this.addToBlogs} sendNotification={this.setNotification} />
           <h2>blogs</h2>
           {this.state.blogs.map(blog =>
             <Blog key={blog.id} blog={blog}/>
@@ -102,7 +138,10 @@ class App extends React.Component {
     } else {
 
       return (
-      <LoginForm submitLogin={this.submitLogin} credidentials={this.state.credidentials} formInputHandler={this.loginFieldHandler}/>
+        <div>
+          <Notification notification={this.state.notification} />
+          <LoginForm submitLogin={this.submitLogin} credidentials={this.state.credidentials} formInputHandler={this.loginFieldHandler}/>
+        </div>
       )
     }
 

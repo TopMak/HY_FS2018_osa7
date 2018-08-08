@@ -1,0 +1,25 @@
+
+
+.notification-success {
+  color: #258e25;
+  background: #85e085;
+  font-size: 20px;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 60%;
+}
+
+.notification-error {
+  color: #e60000;
+  background: #ff9999;
+  font-size: 20px;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 60%;
+}

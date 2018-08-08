@@ -22,8 +22,10 @@ class NewBlogForm extends React.Component {
     try {
       const response = await blogService.submitNewBlog(this.state.newBlog)
       //Maybe neater to get this.props away, but isn't too bad
+
+      //Add blog to parent's state
       this.props.addBlog(response)
-      console.log(response)
+      //console.log(response)
       console.log("submitted a blog!");
 
       //Reset state to default after valid submit
@@ -34,9 +36,11 @@ class NewBlogForm extends React.Component {
           url : ""
         }
       })
+      this.props.sendNotification({message: "Submitted a blog!", style: "notification-success"}, 5000)
 
     } catch (err) {
-      console.log(err);
+      // console.log(err.response);
+      this.props.sendNotification({message: `Submit failed, ${err.response.status} ${err.response.statusText}`, style: "notification-error"}, 5000)
     }
   }
 
@@ -85,46 +89,5 @@ class NewBlogForm extends React.Component {
   }
 
 }
-
-
-// const NewBlogForm = ({submitBlog, blogEntry, formInputHandler}) => {
-//
-//   return (
-//
-//     <form onSubmit={submitBlog}>
-//       <div>
-//         tittle
-//         <input
-//           type="text"
-//           name="title"
-//           value={blogEntry.username}
-//           onChange={formInputHandler}
-//         />
-//       </div>
-//       <div>
-//         author
-//         <input
-//           type="text"
-//           name="author"
-//           value={blogEntry.password}
-//           onChange={formInputHandler}
-//         />
-//       </div>
-//       <div>
-//         url
-//         <input
-//           type="text"
-//           name="url"
-//           value={blogEntry.password}
-//           onChange={formInputHandler}
-//         />
-//       </div>
-//       <button type="submit">Submit blog</button>
-//     </form>
-//
-//   )
-//
-// }
-
 
 export default NewBlogForm
