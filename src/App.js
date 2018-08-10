@@ -1,5 +1,4 @@
 import React from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 
 //My components
@@ -7,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Blog from './components/Blog'
 
 
 //My services
@@ -133,7 +133,7 @@ class App extends React.Component {
             <NewBlogForm
             addBlog={this.addToBlogs}
             sendNotification={this.setNotification}
-            toggle={this.blogForm} 
+            toggle={this.blogForm}
             />
           </Togglable>
           <h2>blogs</h2>

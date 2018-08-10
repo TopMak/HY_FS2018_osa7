@@ -23,3 +23,10 @@
   margin-bottom: 10px;
   width: 60%;
 }
+
+
+/* Make blog line bolded when "mouseovered" */
+.blogDiv:hover {
+  font-weight: bold;
+
+}
