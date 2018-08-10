@@ -17,15 +17,16 @@ class Blog extends React.Component {
 
 
   render() {
-    const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
+
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+
     //Prefer onClick function in tittle paragraph, instead in whole div)
     return(
       <div>
         <p className="blogDiv" onClick={this.toggleOnClick}>{this.props.blog.title} {this.props.blog.author} </p>
           <ul style={showWhenVisible}>
-            <li> URL: {this.props.blog.url} </li>
-            <li> {this.props.blog.likes} likes <button onClick={null}>Like</button> </li>
+            <li> URL: <a href={this.props.blog.url} target="_blank">{this.props.blog.url} </a></li>
+            <li> {this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>Like</button> </li>
             <li> Added by user: {this.props.blog.user.name} </li>
           </ul>
       </div>

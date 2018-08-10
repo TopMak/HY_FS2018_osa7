@@ -23,5 +23,16 @@ const submitNewBlog = async (newBlogData) => {
   return response.data
 }
 
+const submitUpdateToBlog = async (updatedBlogID) => {
 
-export default { getAll, setToken, submitNewBlog }
+  // const setHeaders = {
+  //   headers: {'Authorization': token }
+  // }
+
+  //Allow likes to all viewers?
+  const response = await axios.put(`${baseUrl}/${updatedBlogID}`)
+  return response.data
+}
+
+
+export default { getAll, setToken, submitNewBlog, submitUpdateToBlog }
