@@ -31,9 +31,12 @@ class App extends React.Component {
 
   componentDidMount() {
     //On mount, fetch blogs
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs }, () => console.log(blogs))
-    )
+    blogService.getAll().then(blogs => {
+      const sorted = this.blogsSortByLikes(blogs)
+      this.setState({ blogs: sorted })
+      //this.setState({ blogs })
+    })
+
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
 
     // if(loggedInUserJSON === "undefined" || "null"){
@@ -72,9 +75,11 @@ class App extends React.Component {
     this.setState( { blogs: this.state.blogs.concat(newBlog) } )
   }
 
+  //Every times blog is updated (like pressed, it will sort the likes. --> not very efficient?)
   updateBlogs = (updatedBlog) => {
     const updatedBlogs = this.state.blogs.map( blog => blog.id === updatedBlog.id ? updatedBlog : blog)
-    this.setState( { blogs: updatedBlogs } )
+    //this.setState( { blogs: updatedBlogs } )
+    this.setState( {blogs: this.blogsSortByLikes(updatedBlogs)})
   }
 
   setNotification = (notification, sec) => {
@@ -87,6 +92,10 @@ class App extends React.Component {
       console.log("timeout");
       this.setState({notification: {message: null, style: null}})
       }, sec)
+  }
+
+  blogsSortByLikes = (blogs) => {
+    return blogs.concat().sort( (a,b) => b.likes - a.likes);
   }
 
 
@@ -132,8 +141,9 @@ class App extends React.Component {
         const updatedBlog = await blogService.submitUpdateToBlog(updatedBlogID)
         //console.log(updatedData);
 
-        const updatedBlogs = this.state.blogs.map( blog => blog.id === updatedBlog.id ? updatedBlog : blog)
-        this.setState( { blogs: updatedBlogs } )
+        // const updatedBlogs = this.state.blogs.map( blog => blog.id === updatedBlog.id ? updatedBlog : blog)
+        // this.setState( { blogs: updatedBlogs } )
+        this.updateBlogs(updatedBlog)   //Separate function, since we can use this with delete too!
 
       } catch (err) {
         this.setState({
