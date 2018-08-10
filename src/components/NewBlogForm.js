@@ -12,7 +12,7 @@ class NewBlogForm extends React.Component {
         url : ""
       }
     }
-  //console.log(this.props)
+  // console.log(this.props)
   }
 
   submitBlog = async (event) => {
@@ -27,6 +27,7 @@ class NewBlogForm extends React.Component {
       this.props.addBlog(response)
       //console.log(response)
       console.log("submitted a blog!");
+      this.props.toggle.toggleVisibility()
 
       //Reset state to default after valid submit
       this.setState({

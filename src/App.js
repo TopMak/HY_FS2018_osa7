@@ -6,6 +6,8 @@ import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+
 
 //My services
 import loginService from './services/login'
@@ -127,7 +129,13 @@ class App extends React.Component {
           <p>
             Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
           </p>
-          <NewBlogForm addBlog={this.addToBlogs} sendNotification={this.setNotification} />
+          <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
+            <NewBlogForm
+            addBlog={this.addToBlogs}
+            sendNotification={this.setNotification}
+            toggle={this.blogForm} 
+            />
+          </Togglable>
           <h2>blogs</h2>
           {this.state.blogs.map(blog =>
             <Blog key={blog.id} blog={blog}/>
