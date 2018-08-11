@@ -209,7 +209,7 @@ class App extends React.Component {
           </Togglable>
           <h2>Blogs</h2>
           {this.state.blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} like={this.submitLike} delete={this.deletePost}/>
+            <Blog key={blog.id} blog={blog} like={this.submitLike} delete={this.deletePost} currentUsername={this.state.loggedUser.username}/>
           )}
         </div>
       )

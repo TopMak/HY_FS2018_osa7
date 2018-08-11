@@ -20,7 +20,10 @@ class Blog extends React.Component {
 
     const showWhenVisible = { display: this.state.visible ? '' : 'none', listStyleType:"none", }
     //If user doesn't exist, we call user "anonymous" to prevent UI errors
-    const user = !this.props.blog.hasOwnProperty('user') ? "anonymous" : (this.props.blog.user === null) ? "anonymous" : this.props.blog.user.name
+    const user = !this.props.blog.hasOwnProperty('user') ? "anonymous" : (this.props.blog.user === null) ? {username: "anonymous"} : this.props.blog.user
+
+    //Render delete button if the current user is the blog entry owner or anonymous. NOTE check done using username, not ids
+    const showDelete = {display: (user.username === this.props.currentUsername || user.username === "anonymous") ? '' : 'none'}
 
     //Prefer onClick function in tittle paragraph, instead in whole div)
     return(
@@ -29,8 +32,8 @@ class Blog extends React.Component {
           <ul style={showWhenVisible}>
             <li> URL: <a href={this.props.blog.url} target="_blank">{this.props.blog.url} </a></li>
             <li> {this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>Like</button> </li>
-            <li> Added by user: {user} </li>
-            <li> <button onClick={this.props.delete(this.props.blog.id)}>Delete</button> </li>
+            <li> Added by user: {user.username} </li>
+            <li> <button style={showDelete} onClick={this.props.delete(this.props.blog.id)}>Delete</button> </li>
           </ul>
       </div>
 
