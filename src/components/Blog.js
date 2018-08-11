@@ -18,7 +18,9 @@ class Blog extends React.Component {
 
   render() {
 
-    const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+    const showWhenVisible = { display: this.state.visible ? '' : 'none', listStyleType:"none", }
+    //If user doesn't exist, we call user "anonymous" to prevent UI errors
+    const user = !this.props.blog.hasOwnProperty('user') ? "anonymous" : (this.props.blog.user === null) ? "anonymous" : this.props.blog.user.name
 
     //Prefer onClick function in tittle paragraph, instead in whole div)
     return(
@@ -27,7 +29,8 @@ class Blog extends React.Component {
           <ul style={showWhenVisible}>
             <li> URL: <a href={this.props.blog.url} target="_blank">{this.props.blog.url} </a></li>
             <li> {this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>Like</button> </li>
-            <li> Added by user: {this.props.blog.user.name} </li>
+            <li> Added by user: {user} </li>
+            <li> <button onClick={this.props.delete(this.props.blog.id)}>Delete</button> </li>
           </ul>
       </div>
 

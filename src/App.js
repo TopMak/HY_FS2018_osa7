@@ -31,6 +31,7 @@ class App extends React.Component {
 
   componentDidMount() {
     //On mount, fetch blogs
+    console.log("Component APP mounts");
     blogService.getAll().then(blogs => {
       const sorted = this.blogsSortByLikes(blogs)
       this.setState({ blogs: sorted })
@@ -64,6 +65,8 @@ class App extends React.Component {
   logoutHandler = (event) => {
     //Clear the current user from app state and localStorage
     window.localStorage.removeItem('loggedInUser')
+    //Clear the variable in blogService as well
+    blogService.setToken(null)
     this.setState( {
       loggedUser: null ,
       notification: {message: "Logout!", style: "notification-success"}
@@ -107,7 +110,8 @@ class App extends React.Component {
     try {
 
       const loginData = await loginService.loginUser(this.state.credidentials)
-
+      blogService.setToken(loginData.token)
+      //console.log(loginData);
       //If succesful login, set user information to localStorage
       window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
 
@@ -154,6 +158,37 @@ class App extends React.Component {
    }
   }
 
+  deletePost = (deletePostID) => {
+    return async () =>{
+      try {
+        console.log("Delete pressed! blogid: ", deletePostID);
+
+        if (window.confirm("Do you really wanna delete" + this.state.blogs.find(n => n.id === deletePostID).title + " ?")) {
+
+          const response = await blogService.deleteBlogByID(deletePostID)
+          //console.log(response.status);
+          if(response.status === 204){
+              console.log("delete succesful");
+              const updatedBlogs = this.state.blogs.filter( blog => blog.id !== deletePostID)
+              this.setState({
+              blogs : updatedBlogs,
+              notification: {message: 'Post deleted successfully', style: "notification-success"}
+              })
+              this.notificationTimeout(5000)
+          }
+        } else {
+          console.log("Cancelled")
+        }
+
+      } catch (err) {
+          this.setState({
+          notification: {message: `Delete failed, ${err}`, style: "notification-error"}
+          })
+          this.notificationTimeout(5000)
+      }
+    }
+  }
+
   render() {
 
 
@@ -172,9 +207,9 @@ class App extends React.Component {
             toggle={this.blogForm}
             />
           </Togglable>
-          <h2>blogs</h2>
+          <h2>Blogs</h2>
           {this.state.blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} like={this.submitLike}/>
+            <Blog key={blog.id} blog={blog} like={this.submitLike} delete={this.deletePost}/>
           )}
         </div>
       )

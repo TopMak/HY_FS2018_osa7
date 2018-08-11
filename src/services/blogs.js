@@ -34,5 +34,16 @@ const submitUpdateToBlog = async (updatedBlogID) => {
   return response.data
 }
 
+const deleteBlogByID = async (deleteBlogID) => {
 
-export default { getAll, setToken, submitNewBlog, submitUpdateToBlog }
+  const setHeaders = {
+    headers: {'Authorization': token }
+  }
+
+  //Allow likes to all viewers?
+  const response = await axios.delete(`${baseUrl}/${deleteBlogID}`, setHeaders)
+  return response
+}
+
+
+export default { getAll, setToken, submitNewBlog, submitUpdateToBlog, deleteBlogByID }
