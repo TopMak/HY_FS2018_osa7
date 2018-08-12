@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import '../app.css';
 
@@ -39,6 +40,13 @@ class Blog extends React.Component {
 
     )
   }
+
+}
+
+Blog.propTypes = {
+  delete: PropTypes.func.isRequired,
+  like: PropTypes.func.isRequired,
+  currentUsername: PropTypes.string.isRequired
 
 }
 
