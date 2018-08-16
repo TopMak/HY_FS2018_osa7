@@ -7,7 +7,7 @@ class Blog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-    //  isHovering: false,  //Added hover state in here, but prefer standard css actually...
+    //  isHovering: false,  //Added hover state in here, but css works too...
       isVisible: false
     }
   }
@@ -28,9 +28,9 @@ class Blog extends React.Component {
 
     //Prefer onClick function in tittle paragraph, instead in whole div)
     return(
-      <div>
+      <div className="wholeBlog">
         <p className="blogDiv" onClick={this.toggleOnClick}>{this.props.blog.title} - {this.props.blog.author} </p>
-          <ul style={showWhenVisible}>
+          <ul style={showWhenVisible} className="blogDetailsList">
             <li> URL: <a href={this.props.blog.url} target="_blank">{this.props.blog.url} </a></li>
             <li> {this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>Like</button> </li>
             <li> Added by user: {user.username} </li>
@@ -47,7 +47,6 @@ Blog.propTypes = {
   delete: PropTypes.func.isRequired,
   like: PropTypes.func.isRequired,
   currentUsername: PropTypes.string.isRequired
-
 }
 
 export default Blog
