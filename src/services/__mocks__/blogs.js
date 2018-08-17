@@ -10,7 +10,7 @@ const blogs = [
     user: {
       _id: "5b69aa87cdbd893f162bb21c",
       username: "TepTest66",
-      name: "Teppo Testaaja",
+      name: "Teppo Testaaja"
     }
   },
   {
@@ -22,7 +22,7 @@ const blogs = [
     user: {
       _id: "5b69aa87cdbd893f162bb21c",
       username: "TepTest66",
-      name: "Teppo Testaaja",
+      name: "Teppo Testaaja"
     }
   },
   {
@@ -34,7 +34,7 @@ const blogs = [
     user: {
       _id: "5b69aa88cdbd893f162bb21d",
       username: "Roro02",
-      name: "Roni Ropaaja",
+      name: "Roni Ropaaja"
     }
   }
 ]
@@ -43,4 +43,9 @@ const getAll = () => {
   return Promise.resolve(blogs)
 }
 
-export default { getAll, blogs }
+const setToken = (newToken) => {
+  token = `bearer ${newToken}`
+  console.log("current user token: ", token);
+}
+
+export default { getAll, blogs, setToken }

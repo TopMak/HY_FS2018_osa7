@@ -34,6 +34,7 @@ class App extends React.Component {
     console.log("Component APP mounts");
     blogService.getAll().then(blogs => {
       const sorted = this.blogsSortByLikes(blogs)
+      //console.log(sorted);
       this.setState({ blogs: sorted })
       //this.setState({ blogs })
     })
@@ -79,6 +80,7 @@ class App extends React.Component {
   }
 
   //Every times blog is updated (like pressed, it will sort the likes. --> not very efficient?)
+  //Not problem with few blogs, but with many --> "compare blog likes with one ahead of blog" (since you can only increment it...)
   updateBlogs = (updatedBlog) => {
     const updatedBlogs = this.state.blogs.map( blog => blog.id === updatedBlog.id ? updatedBlog : blog)
     //this.setState( { blogs: updatedBlogs } )
