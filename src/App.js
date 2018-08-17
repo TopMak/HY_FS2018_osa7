@@ -195,7 +195,7 @@ class App extends React.Component {
     if(this.state.loggedUser){
 
       return (
-        <div>
+        <div className="blogView">
           <Notification notification={this.state.notification} />
           <p>
             Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
@@ -217,7 +217,7 @@ class App extends React.Component {
     } else {
 
       return (
-        <div>
+        <div className="loginFormPage-loggedout">
           <Notification notification={this.state.notification} />
           <LoginForm submitLogin={this.submitLogin} credidentials={this.state.credidentials} formInputHandler={this.loginFieldHandler}/>
         </div>
