@@ -3,13 +3,19 @@ import { mount } from 'enzyme'
 import App from './App'
 import Blog from './components/Blog'
 
+import store from './store'
+import { Provider, connect } from 'react-redux'
+
 jest.mock('./services/blogs')
 import blogService from './services/blogs'
 
 describe('<App />', () => {
   let app
   beforeAll(() => {
-    app = mount(<App />)
+    // app = mount(<App />)
+    app = mount(<Provider store={store}>
+      <App/>
+    </Provider>)
   })
 
   it('renders only login page', () => {
