@@ -1,6 +1,7 @@
 import React from 'react'
 import blogService from './services/blogs'
-
+// redux
+import { connect } from 'react-redux'
 //My components
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
@@ -8,6 +9,8 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Blog from './components/Blog'
 
+// action imports
+import { notifyWithTimeout } from './reducers/notificationReducer'
 
 //My services
 import loginService from './services/login'
@@ -24,8 +27,7 @@ class App extends React.Component {
         username: "",
         password: ""
       },
-      loggedUser : null,
-      notification: {message: null, style: null}
+      loggedUser : null
     }
   }
 
@@ -68,11 +70,8 @@ class App extends React.Component {
     window.localStorage.removeItem('loggedInUser')
     //Clear the variable in blogService as well
     blogService.setToken(null)
-    this.setState( {
-      loggedUser: null ,
-      notification: {message: "Logout!", style: "notification-success"}
-    })
-    this.notificationTimeout(5000)
+    this.setState( { loggedUser: null })
+    this.props.notifyWithTimeout("Logout!", "notification-success")
   }
 
   addToBlogs = (newBlog) => {
@@ -87,17 +86,6 @@ class App extends React.Component {
     this.setState( {blogs: this.blogsSortByLikes(updatedBlogs)})
   }
 
-  setNotification = (notification, sec) => {
-    this.setState( { notification } )
-    this.notificationTimeout(sec)
-  }
-
-  notificationTimeout(sec){
-    setTimeout((sec) => {
-      console.log("timeout");
-      this.setState({notification: {message: null, style: null}})
-      }, sec)
-  }
 
   blogsSortByLikes = (blogs) => {
     return blogs.concat().sort( (a,b) => b.likes - a.likes);
@@ -120,9 +108,8 @@ class App extends React.Component {
       this.setState({
         credidentials: { username: "", password: "" },
         loggedUser: loginData,
-        notification: {message: "Login success!", style: "notification-success"}
       })
-      this.notificationTimeout(5000)
+      this.props.notifyWithTimeout('Login success!', "notification-success")
 
       //console.log(loginData)
 
@@ -130,11 +117,8 @@ class App extends React.Component {
       //Maybe display errors to user via notifications? Now just console.log
       console.log(err.response)
       // console.log(err.status)
-      this.setState({
-        credidentials: { username: "", password: "" },
-        notification: {message: `Login failed, ${err.response.data.error}`, style: "notification-error"}
-      })
-      this.notificationTimeout(5000)
+      this.setState({ credidentials: { username: "", password: "" } })
+      this.props.notifyWithTimeout(`Login failed, ${err.response.data.error}`, "notification-error")
     }
   }
 
@@ -152,10 +136,7 @@ class App extends React.Component {
         this.updateBlogs(updatedBlog)   //Separate function, since we can use this with delete too!
 
       } catch (err) {
-        this.setState({
-        notification: {message: `Update failed, ${err}`, style: "notification-error"}
-        })
-        this.notificationTimeout(5000)
+        this.props.notifyWithTimeout(`Update failed, ${err}`, "notification-error")
       }
    }
   }
@@ -172,21 +153,15 @@ class App extends React.Component {
           if(response.status === 204){
               console.log("delete succesful");
               const updatedBlogs = this.state.blogs.filter( blog => blog.id !== deletePostID)
-              this.setState({
-              blogs : updatedBlogs,
-              notification: {message: 'Post deleted successfully', style: "notification-success"}
-              })
-              this.notificationTimeout(5000)
+              this.setState({ blogs : updatedBlogs })
+              this.props.notifyWithTimeout('Post deleted successfully', "notification-success")
           }
         } else {
           console.log("Cancelled")
         }
 
       } catch (err) {
-          this.setState({
-          notification: {message: `Delete failed, ${err}`, style: "notification-error"}
-          })
-          this.notificationTimeout(5000)
+          this.props.notifyWithTimeout(`Delete failed, ${err}`, "notification-error")
       }
     }
   }
@@ -198,14 +173,13 @@ class App extends React.Component {
 
       return (
         <div className="blogView">
-          <Notification notification={this.state.notification} />
+          <Notification />
           <p>
             Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
           </p>
           <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
             <NewBlogForm
             addBlog={this.addToBlogs}
-            sendNotification={this.setNotification}
             toggle={this.blogForm}
             />
           </Togglable>
@@ -220,7 +194,7 @@ class App extends React.Component {
 
       return (
         <div className="loginFormPage-loggedout">
-          <Notification notification={this.state.notification} />
+          <Notification />
           <LoginForm submitLogin={this.submitLogin} credidentials={this.state.credidentials} formInputHandler={this.loginFieldHandler}/>
         </div>
       )
@@ -229,4 +203,13 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    notification: state.notification
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { notifyWithTimeout }
+)(App)

@@ -1,5 +1,9 @@
 import React from 'react'
 import blogService from '../services/blogs'
+// redux
+import { connect } from 'react-redux'
+
+import { notifyWithTimeout } from '../reducers/notificationReducer'
 
 
 class NewBlogForm extends React.Component {
@@ -37,11 +41,11 @@ class NewBlogForm extends React.Component {
           url : ""
         }
       })
-      this.props.sendNotification({message: "Submitted a blog!", style: "notification-success"}, 5000)
+      this.props.notifyWithTimeout("Submitted a blog!", "notification-success")
 
     } catch (err) {
       // console.log(err.response);
-      this.props.sendNotification({message: `Submit failed, ${err.response.status} ${err.response.statusText}`, style: "notification-error"}, 5000)
+      this.props.notifyWithTimeout(`Submit failed, ${err.response.status} ${err.response.statusText}`, "notification-error")
     }
   }
 
@@ -91,4 +95,7 @@ class NewBlogForm extends React.Component {
 
 }
 
-export default NewBlogForm
+export default connect(
+  null,
+  { notifyWithTimeout }
+)(NewBlogForm)
