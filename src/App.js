@@ -11,6 +11,7 @@ import Blog from './components/Blog'
 
 // action imports
 import { notifyWithTimeout } from './reducers/notificationReducer'
+import { initBlogs } from './reducers/blogReducer'
 
 //My services
 import loginService from './services/login'
@@ -22,7 +23,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      blogs: [],
+      // blogs: [],
       credidentials: {
         username: "",
         password: ""
@@ -33,13 +34,7 @@ class App extends React.Component {
 
   componentDidMount() {
     //On mount, fetch blogs
-    console.log("Component APP mounts");
-    blogService.getAll().then(blogs => {
-      const sorted = this.blogsSortByLikes(blogs)
-      //console.log(sorted);
-      this.setState({ blogs: sorted })
-      //this.setState({ blogs })
-    })
+    this.props.initBlogs()
 
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
 
@@ -74,9 +69,6 @@ class App extends React.Component {
     this.props.notifyWithTimeout("Logout!", "notification-success")
   }
 
-  addToBlogs = (newBlog) => {
-    this.setState( { blogs: this.state.blogs.concat(newBlog) } )
-  }
 
   //Every times blog is updated (like pressed, it will sort the likes. --> not very efficient?)
   //Not problem with few blogs, but with many --> "compare blog likes with one ahead of blog" (since you can only increment it...)
@@ -122,24 +114,6 @@ class App extends React.Component {
     }
   }
 
-  //Took a while to figure this out!!
-  //Render an async function into event source (button)
-  submitLike = (updatedBlogID) => {
-  return async () => {
-    try {
-        console.log("Like pressed! blogid: ", updatedBlogID);
-        const updatedBlog = await blogService.submitUpdateToBlog(updatedBlogID)
-        //console.log(updatedData);
-
-        // const updatedBlogs = this.state.blogs.map( blog => blog.id === updatedBlog.id ? updatedBlog : blog)
-        // this.setState( { blogs: updatedBlogs } )
-        this.updateBlogs(updatedBlog)   //Separate function, since we can use this with delete too!
-
-      } catch (err) {
-        this.props.notifyWithTimeout(`Update failed, ${err}`, "notification-error")
-      }
-   }
-  }
 
   deletePost = (deletePostID) => {
     return async () =>{
@@ -179,13 +153,12 @@ class App extends React.Component {
           </p>
           <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
             <NewBlogForm
-            addBlog={this.addToBlogs}
             toggle={this.blogForm}
             />
           </Togglable>
           <h2>Blogs</h2>
-          {this.state.blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} like={this.submitLike} delete={this.deletePost} currentUsername={this.state.loggedUser.username}/>
+          {this.props.blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} currentUsername={this.state.loggedUser.username}/>
           )}
         </div>
       )
@@ -205,11 +178,12 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    blogs: state.blogs,
     notification: state.notification
   }
 }
 
 export default connect(
   mapStateToProps,
-  { notifyWithTimeout }
+  { initBlogs, notifyWithTimeout }
 )(App)

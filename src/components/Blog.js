@@ -1,7 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { connect } from 'react-redux'
+
 import '../app.css';
+
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
 class Blog extends React.Component {
   constructor(props) {
@@ -32,9 +36,9 @@ class Blog extends React.Component {
         <p className="blogDiv" onClick={this.toggleOnClick}>{this.props.blog.title} - {this.props.blog.author} </p>
           <ul style={showWhenVisible} className="blogDetailsList">
             <li> URL: <a href={this.props.blog.url} rel="noopener noreferrer" target="_blank">{this.props.blog.url} </a></li>
-            <li> {this.props.blog.likes} likes <button onClick={this.props.like(this.props.blog.id)}>Like</button> </li>
+            <li> {this.props.blog.likes} likes <button onClick={() => this.props.likeBlog(this.props.blog.id)}>Like</button> </li>
             <li> Added by user: {user.username} </li>
-            <li> <button style={showDelete} onClick={this.props.delete(this.props.blog.id)}>Delete</button> </li>
+            <li> <button style={showDelete} onClick={() => this.props.removeBlog(this.props.blog.id)}>Delete</button> </li>
           </ul>
       </div>
 
@@ -44,9 +48,12 @@ class Blog extends React.Component {
 }
 
 Blog.propTypes = {
-  delete: PropTypes.func.isRequired,
-  like: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+  likeBlog: PropTypes.func.isRequired,
   currentUsername: PropTypes.string.isRequired
 }
 
-export default Blog
+export default connect(
+  null,
+  { likeBlog, removeBlog }
+)(Blog)

@@ -4,6 +4,7 @@ import blogService from '../services/blogs'
 import { connect } from 'react-redux'
 
 import { notifyWithTimeout } from '../reducers/notificationReducer'
+import { addBlog } from '../reducers/blogReducer'
 
 
 class NewBlogForm extends React.Component {
@@ -26,7 +27,7 @@ class NewBlogForm extends React.Component {
     try {
       const response = await blogService.submitNewBlog(this.state.newBlog)
       //Maybe neater to get this.props away, but isn't too bad
-
+      console.log(response);
       //Add blog to parent's state
       this.props.addBlog(response)
       //console.log(response)
@@ -34,17 +35,11 @@ class NewBlogForm extends React.Component {
       this.props.toggle.toggleVisibility()
 
       //Reset state to default after valid submit
-      this.setState({
-        newBlog: {
-          title : "",
-          author : "",
-          url : ""
-        }
-      })
+      this.setState({ newBlog: { title : "", author : "", url : ""}} )
       this.props.notifyWithTimeout("Submitted a blog!", "notification-success")
 
     } catch (err) {
-      // console.log(err.response);
+      console.log(err);
       this.props.notifyWithTimeout(`Submit failed, ${err.response.status} ${err.response.statusText}`, "notification-error")
     }
   }
@@ -97,5 +92,5 @@ class NewBlogForm extends React.Component {
 
 export default connect(
   null,
-  { notifyWithTimeout }
+  { notifyWithTimeout, addBlog }
 )(NewBlogForm)
