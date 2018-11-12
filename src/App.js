@@ -13,17 +13,22 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Blog from './components/Blog'
 
+// ViewComponents --> "pages"
+import UsersView from './components/views/UsersView'
+import BlogsView from './components/views/BlogsView'
+
 // action imports
 import { notifyWithTimeout } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
+import { setLoggedUser } from './reducers/loginReducer'
 
 //My services
 import blogService from './services/blogs'
-import usersService from './services/users'
 import loginService from './services/login'
 
 //Styles
 import './app.css';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -51,7 +56,9 @@ class App extends React.Component {
 
     if(loggedInUserJSON){
       const userData = JSON.parse(loggedInUserJSON)
-      this.setState({loggedUser: userData})
+      console.log(userData);
+      this.props.setLoggedUser(userData)
+      // this.setState({loggedUser: userData})
       blogService.setToken(userData.token)
     }
 
@@ -71,7 +78,8 @@ class App extends React.Component {
     window.localStorage.removeItem('loggedInUser')
     //Clear the variable in blogService as well
     blogService.setToken(null)
-    this.setState( { loggedUser: null })
+    this.props.setLoggedUser('')
+    // this.setState( { loggedUser: null })
     this.props.notifyWithTimeout("Logout!", "notification-success")
   }
 
@@ -109,22 +117,24 @@ class App extends React.Component {
 
   render() {
 
+    if(this.props.currentUser){
 
-    if(this.state.loggedUser){
 
       return (
-        <div className="blogView">
-          <Notification />
-          <p>
-            Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
-          </p>
-          <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
-            <NewBlogForm toggle={this.blogForm} />
-          </Togglable>
-          <h2>Blogs</h2>
-          {this.props.blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} currentUsername={this.state.loggedUser.username}/>
-          )}
+        <div>
+        <Notification />
+        <p>
+          Logged in as {this.props.currentUser.name} <button onClick={this.logoutHandler}>Logout</button>
+        </p>
+        <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
+          <NewBlogForm toggle={this.blogForm} />
+        </Togglable>
+        <Router>
+          <div>
+          <Route exact path="/" component={BlogsView}/>
+          <Route path="/users" component={UsersView}/>
+          </div>
+        </Router>
         </div>
       )
 
@@ -143,6 +153,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    currentUser: state.login.currentUser,
     blogs: state.blogs,
     notification: state.notification
   }
@@ -150,5 +161,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { initBlogs, notifyWithTimeout }
+  { initBlogs, notifyWithTimeout, setLoggedUser }
 )(App)
