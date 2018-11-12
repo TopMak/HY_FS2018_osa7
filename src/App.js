@@ -15,16 +15,18 @@ import Blog from './components/Blog'
 
 // ViewComponents --> "pages"
 import UsersView from './components/views/UsersView'
+import UserView from './components/views/UserView'
 import BlogsView from './components/views/BlogsView'
 
 // action imports
 import { notifyWithTimeout } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
-import { setLoggedUser } from './reducers/loginReducer'
+import { setLoggedUser, getUsers } from './reducers/loginReducer'
 
 //My services
 import blogService from './services/blogs'
 import loginService from './services/login'
+import usersService from './services/users'
 
 //Styles
 import './app.css';
@@ -39,7 +41,9 @@ class App extends React.Component {
         username: "",
         password: ""
       },
-      loggedUser : null
+      users: []
+      // ,
+      // loggedUser : null
     }
   }
 
@@ -58,6 +62,7 @@ class App extends React.Component {
       const userData = JSON.parse(loggedInUserJSON)
       console.log(userData);
       this.props.setLoggedUser(userData)
+      this.props.getUsers()
       // this.setState({loggedUser: userData})
       blogService.setToken(userData.token)
     }
@@ -97,9 +102,10 @@ class App extends React.Component {
       //If succesful login, set user information to localStorage
       window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
 
+
       this.setState({
         credidentials: { username: "", password: "" },
-        loggedUser: loginData,
+        loggedUser: loginData
       })
       this.props.notifyWithTimeout('Login success!', "notification-success")
 
@@ -114,6 +120,11 @@ class App extends React.Component {
     }
   }
 
+  userByID = (id) => {
+
+      console.log("USERS:",this.state.users);
+      this.props.users.find(a => a.id === id)
+  }
 
   render() {
 
@@ -132,7 +143,9 @@ class App extends React.Component {
         <Router>
           <div>
           <Route exact path="/" component={BlogsView}/>
-          <Route path="/users" component={UsersView}/>
+          <Route exact path="/users" component={UsersView}/>
+          <Route exact path="/users/:id" component={({match}) =>
+              <UserView id={match.params.id} />}/>
           </div>
         </Router>
         </div>
@@ -151,9 +164,13 @@ class App extends React.Component {
   }
 }
 
+// <Route exact path="/users/:id" component={({match}) =>
+//     <UserView user={this.userByID(match.params.id)} />}/>
+
 const mapStateToProps = (state) => {
   return {
     currentUser: state.login.currentUser,
+    users: state.login.users,
     blogs: state.blogs,
     notification: state.notification
   }
@@ -161,5 +178,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { initBlogs, notifyWithTimeout, setLoggedUser }
+  { initBlogs, notifyWithTimeout, setLoggedUser, getUsers }
 )(App)

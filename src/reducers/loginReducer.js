@@ -1,4 +1,6 @@
-const initState= {currentUser:''}
+import usersService from '../services/users'
+
+const initState= {currentUser: undefined, users:[]}
 
 
 const loginReducer = (state = initState, action) => {
@@ -10,6 +12,11 @@ const loginReducer = (state = initState, action) => {
     return newCurrentUser
   }
 
+  case 'SET_OTHER_USERS': {
+    const newOtherUsers = {...state, users: action.users}
+    return newOtherUsers
+  }
+
   default:
     return state
   }
@@ -17,12 +24,39 @@ const loginReducer = (state = initState, action) => {
 
 //Action creators
 
+// If valid login exists, set LoggedUser and get other users
+// Can be later changed eg. only for "admin users"
 export const setLoggedUser = (currentUser) => {
-  return {
-    type: 'SET_LOGGED_USER',
-    currentUser
+
+  return async (dispatch) => {
+    dispatch({ type: 'SET_LOGGED_USER', currentUser })
+    try {
+      const updatedBlog = await usersService.getAll()
+
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
+
+export const getUsers = () => {
+  return async (dispatch) => {
+    const users = await usersService.getAll()
+    dispatch({
+      type: 'SET_OTHER_USERS',
+      users
+    })
+  }
+}
+
+// ORIGINAL
+// export const setLoggedUser = (currentUser) => {
+//   return {
+//     type: 'SET_LOGGED_USER',
+//     currentUser
+//   }
+// }
+
 
 
 export default loginReducer

@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import usersService from '../../services/users'
+
 
 
 // const UsersView = (usersData) => {
@@ -25,13 +27,19 @@ class UsersView extends React.Component {
         <div className="usersView">
           <h2>Users</h2>
           <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Blogs</th>
+            </tr>
+          </thead>
             <tbody>
-              <tr>
-               <th>User</th>
-               <th>Blogs</th>
-              </tr>
+
               {this.state.usersData.map(user =>
-                <tr key={user.name.replace(/\s/g, '').toLowerCase()}><td>{user.name}</td><td>{user.blogs.length}</td></tr>
+                <tr key={user.id}>
+                  <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
+                  <td>{user.blogs.length}</td>
+                </tr>
               )}
             </tbody>
           </table>
