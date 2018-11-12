@@ -17,6 +17,8 @@ import Blog from './components/Blog'
 import UsersView from './components/views/UsersView'
 import UserView from './components/views/UserView'
 import BlogsView from './components/views/BlogsView'
+import BlogView from './components/views/BlogView'
+
 
 // action imports
 import { notifyWithTimeout } from './reducers/notificationReducer'
@@ -41,7 +43,7 @@ class App extends React.Component {
         username: "",
         password: ""
       },
-      users: []
+      // users: []
       // ,
       // loggedUser : null
     }
@@ -146,6 +148,8 @@ class App extends React.Component {
           <Route exact path="/users" component={UsersView}/>
           <Route exact path="/users/:id" component={({match}) =>
               <UserView id={match.params.id} />}/>
+          <Route exact path="/blogs/:id" component={({match}) =>
+              <BlogView id={match.params.id} />}/>
           </div>
         </Router>
         </div>

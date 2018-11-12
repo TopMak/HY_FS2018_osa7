@@ -1,8 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 // components
-import Blog from '../Blog'
+// import Blog from '../Blog'
 
 const BlogsView = (props) => {
   console.log(props);
@@ -10,7 +11,9 @@ const BlogsView = (props) => {
     <div className="blogView">
       <h2>Blogs</h2>
       {props.blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} currentUsername={props.loggedUser.username}/>
+        <div key={blog.id} style={{padding:'5px'}}>
+          <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+        </div>
       )}
     </div>
   )
