@@ -29,7 +29,7 @@ const blogReducer = (state=initState, action) => {
     return updatedBlogs
   }
 
-  case 'DELETE_BLOG':{
+  case 'REMOVE_BLOG':{
     const updatedBlogs = state.filter( blog => blog.id !== action.deletePostID)
     return updatedBlogs
   }
@@ -85,7 +85,7 @@ export const removeBlog = (deletePostID) => {
 
         if(response.status === 204){
             dispatch({
-              type: 'DELETE_BLOG',
+              type: 'REMOVE_BLOG',
               deletePostID
             })
             dispatch(notifyWithTimeout('Post deleted successfully', "notification-success"))

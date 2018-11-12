@@ -1,5 +1,9 @@
 import React from 'react'
-import blogService from './services/blogs'
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
+
 // redux
 import { connect } from 'react-redux'
 //My components
@@ -14,6 +18,8 @@ import { notifyWithTimeout } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
 
 //My services
+import blogService from './services/blogs'
+import usersService from './services/users'
 import loginService from './services/login'
 
 //Styles
@@ -70,20 +76,6 @@ class App extends React.Component {
   }
 
 
-  //Every times blog is updated (like pressed, it will sort the likes. --> not very efficient?)
-  //Not problem with few blogs, but with many --> "compare blog likes with one ahead of blog" (since you can only increment it...)
-  updateBlogs = (updatedBlog) => {
-    const updatedBlogs = this.state.blogs.map( blog => blog.id === updatedBlog.id ? updatedBlog : blog)
-    //this.setState( { blogs: updatedBlogs } )
-    this.setState( {blogs: this.blogsSortByLikes(updatedBlogs)})
-  }
-
-
-  blogsSortByLikes = (blogs) => {
-    return blogs.concat().sort( (a,b) => b.likes - a.likes);
-  }
-
-
   submitLogin = async (event) => {
 
     event.preventDefault()
@@ -115,31 +107,6 @@ class App extends React.Component {
   }
 
 
-  deletePost = (deletePostID) => {
-    return async () =>{
-      try {
-        console.log("Delete pressed! blogid: ", deletePostID);
-
-        if (window.confirm("Do you really wanna delete" + this.state.blogs.find(n => n.id === deletePostID).title + " ?")) {
-
-          const response = await blogService.deleteBlogByID(deletePostID)
-          //console.log(response.status);
-          if(response.status === 204){
-              console.log("delete succesful");
-              const updatedBlogs = this.state.blogs.filter( blog => blog.id !== deletePostID)
-              this.setState({ blogs : updatedBlogs })
-              this.props.notifyWithTimeout('Post deleted successfully', "notification-success")
-          }
-        } else {
-          console.log("Cancelled")
-        }
-
-      } catch (err) {
-          this.props.notifyWithTimeout(`Delete failed, ${err}`, "notification-error")
-      }
-    }
-  }
-
   render() {
 
 
@@ -152,9 +119,7 @@ class App extends React.Component {
             Logged in as {this.state.loggedUser.name} <button onClick={this.logoutHandler}>Logout</button>
           </p>
           <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
-            <NewBlogForm
-            toggle={this.blogForm}
-            />
+            <NewBlogForm toggle={this.blogForm} />
           </Togglable>
           <h2>Blogs</h2>
           {this.props.blogs.map(blog =>
