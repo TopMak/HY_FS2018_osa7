@@ -12,6 +12,8 @@ class UsersView extends React.Component {
     usersData: []
   }
 
+  // Fetches always users from server when mounts
+  // Maybe use store instead?
   componentDidMount(){
 
     usersService

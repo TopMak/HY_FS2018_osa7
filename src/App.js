@@ -12,6 +12,7 @@ import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Blog from './components/Blog'
+import NavMenu from './components/NavMenu'
 
 // ViewComponents --> "pages"
 import UsersView from './components/views/UsersView'
@@ -135,6 +136,8 @@ class App extends React.Component {
 
       return (
         <div>
+        <Router>
+        <div>
         <Notification />
         <p>
           Logged in as {this.props.currentUser.name} <button onClick={this.logoutHandler}>Logout</button>
@@ -142,8 +145,9 @@ class App extends React.Component {
         <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
           <NewBlogForm toggle={this.blogForm} />
         </Togglable>
-        <Router>
-          <div>
+
+          <NavMenu />
+
           <Route exact path="/" component={BlogsView}/>
           <Route exact path="/users" component={UsersView}/>
           <Route exact path="/users/:id" component={({match}) =>
