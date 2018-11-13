@@ -100,4 +100,29 @@ export const removeBlog = (deletePostID) => {
   }
 }
 
+// Update blog with a comment
+export const submitComment = (commentBlogID, comment) => {
+  return async (dispatch) => {
+    try {
+      const response = await blogService.submitComment(commentBlogID, comment)
+
+      if(response.status === 204){
+          return dispatch(notifyWithTimeout('String was empty or false!', "notification-error"))
+      } else {
+
+        dispatch({
+          type: 'UPDATE_BLOG',
+          updatedBlog: response.data
+        })
+        // Good idea to have sorting as action?
+        dispatch({ type: 'SORT_BY_LIKES' })
+        dispatch(notifyWithTimeout(`New comment! '${comment}'`, "notification-success"))
+      }
+    } catch (err) {
+      dispatch(notifyWithTimeout(`Submit comment failed, ${err}`, "notification-error"))
+    }
+
+  }
+}
+
 export default blogReducer

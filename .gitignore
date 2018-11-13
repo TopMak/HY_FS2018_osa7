@@ -1,4 +1,7 @@
 
+#Mock backend file
+db.json
+
 #Folders
 node_modules
 

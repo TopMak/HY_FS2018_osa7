@@ -46,5 +46,16 @@ const deleteBlogByID = async (deleteBlogID) => {
   return response
 }
 
+// Post a comment
+const submitComment = async (commentBlogID, comment) => {
 
-export default { getAll, setToken, submitNewBlog, submitUpdateToBlog, deleteBlogByID }
+  // const setHeaders = {
+  //   headers: {'Authorization': token }
+  // }
+
+  const response = await axios.post(`${baseUrl}/${commentBlogID}/comments`, {comment})
+  return response
+}
+
+
+export default { getAll, setToken, submitNewBlog, submitUpdateToBlog, deleteBlogByID, submitComment }

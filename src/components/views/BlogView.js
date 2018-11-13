@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import { likeBlog, removeBlog } from '../../reducers/blogReducer'
 
+import Comments from '../Comments'
+
 const BlogView = ({blogs, id, ...props}) => {
 
 
@@ -28,6 +30,7 @@ const BlogView = ({blogs, id, ...props}) => {
           <li> Added by user: {user.name} </li>
           <li> <button style={showDelete} onClick={() => props.removeBlog(blog.id)}>Delete</button> </li>
         </ul>
+        <Comments comments={blog.comments} id={blog.id} />
       </div>
     )
   }
