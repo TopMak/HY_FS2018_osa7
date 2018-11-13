@@ -23,7 +23,7 @@ const BlogView = ({blogs, id, history, ...props}) => {
 
     return (
       <div className="blogView">
-        <h2>{blog.name}</h2>
+        <h2>{blog.title}</h2>
         <ul className="blogDetailsList">
           <li> URL: <a href={blog.url} rel="noopener noreferrer" target="_blank">{blog.url} </a></li>
           <li> {blog.likes} likes <button onClick={() => props.likeBlog(blog.id)}>Like</button> </li>

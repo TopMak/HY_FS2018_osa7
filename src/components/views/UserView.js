@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 const UserView = ({users, id}) => {
@@ -21,7 +22,10 @@ const UserView = ({users, id}) => {
           <table>
             <tbody>
               {user.blogs.map(blog =>
-                <tr key={blog._id}><td>{blog.title} by {blog.author}</td></tr>
+                <tr key={blog._id}><td>
+                <Link to={`/blogs/${blog._id}`}>{blog.title} by {blog.author}</Link>
+                </td></tr>
+
               )}
             </tbody>
           </table>
