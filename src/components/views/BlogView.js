@@ -5,7 +5,7 @@ import { likeBlog, removeBlog } from '../../reducers/blogReducer'
 
 import Comments from '../Comments'
 
-const BlogView = ({blogs, id, ...props}) => {
+const BlogView = ({blogs, id, history, ...props}) => {
 
 
   const blogByID = (blogs,id) => blogs.find(a => a.id === id)
@@ -28,7 +28,7 @@ const BlogView = ({blogs, id, ...props}) => {
           <li> URL: <a href={blog.url} rel="noopener noreferrer" target="_blank">{blog.url} </a></li>
           <li> {blog.likes} likes <button onClick={() => props.likeBlog(blog.id)}>Like</button> </li>
           <li> Added by user: {user.name} </li>
-          <li> <button style={showDelete} onClick={() => props.removeBlog(blog.id)}>Delete</button> </li>
+          <li> <button style={showDelete} onClick={() => {props.removeBlog(blog.id); history.push('/')}}>Delete</button> </li>
         </ul>
         <Comments comments={blog.comments} id={blog.id} />
       </div>
@@ -37,7 +37,7 @@ const BlogView = ({blogs, id, ...props}) => {
   else {
     return (
       <div className="blogView">
-        <p> Loading data... </p>
+        <p> {"No blog with this ID!"} </p>
       </div>
     )
   }

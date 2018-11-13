@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   BrowserRouter as Router,
-  Route
+  Route, Switch
 } from 'react-router-dom'
 
 // redux
@@ -126,10 +126,10 @@ class App extends React.Component {
 
 
   render() {
-
+    // TODO router switch currently kinda useless
+    // TODO fix links to ids for switch
+    
     if(this.props.currentUser){
-
-
       return (
         <Router>
         <div>
@@ -143,12 +143,15 @@ class App extends React.Component {
 
           <NavMenu />
 
-          <Route exact path="/" component={BlogsView}/>
-          <Route exact path="/users" component={UsersView}/>
-          <Route exact path="/users/:id" component={({match}) =>
-              <UserView id={match.params.id} />}/>
-          <Route exact path="/blogs/:id" component={({match}) =>
-              <BlogView id={match.params.id} />}/>
+          <Switch>
+            <Route exact path="/" component={BlogsView}/>
+            <Route exact path="/users" component={UsersView}/>
+            <Route exact path="/users/:id" component={({match}) =>
+                <UserView id={match.params.id} />}/>
+            <Route exact path="/blogs/:id" component={({match, history}) =>
+                <BlogView history={history} id={match.params.id} />}/>
+            <Route component={NoMatch} />
+          </Switch>
           </div>
         </Router>
       )
@@ -164,6 +167,17 @@ class App extends React.Component {
     }
 
   }
+}
+
+
+const NoMatch = ({ location }) => {
+  return (
+    <div>
+      <h3>
+        No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  )
 }
 
 

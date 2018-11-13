@@ -22,26 +22,12 @@ class NewBlogForm extends React.Component {
 
   submitBlog = async (event) => {
     event.preventDefault()
-
-    //Catch possible errors with blogService (no connection etc...)
-    try {
-      const response = await blogService.submitNewBlog(this.state.newBlog)
-      //Maybe neater to get this.props away, but isn't too bad
-      console.log(response);
-      //Add blog to parent's state
-      this.props.addBlog(response)
-      //console.log(response)
-      console.log("submitted a blog!");
-      this.props.toggle.toggleVisibility()
-
-      //Reset state to default after valid submit
-      this.setState({ newBlog: { title : "", author : "", url : ""}} )
-      this.props.notifyWithTimeout("Submitted a blog!", "notification-success")
-
-    } catch (err) {
-      console.log(err);
-      this.props.notifyWithTimeout(`Submit failed, ${err.response.status} ${err.response.statusText}`, "notification-error")
-    }
+    this.props.addBlog(this.state.newBlog)
+    //console.log(response)
+    console.log("submitted a blog!");
+    this.props.toggle.toggleVisibility()
+    //Reset state to default after valid submit
+    this.setState({ newBlog: { title : "", author : "", url : ""}} )
   }
 
   formInputHandler = (event) => {

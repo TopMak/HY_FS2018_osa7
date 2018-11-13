@@ -2,6 +2,7 @@
 import blogService from '../services/blogs'
 
 import { notifyWithTimeout } from './notificationReducer'
+import { getUsers } from './loginReducer'
 
 // empty array as initState
 const initState = []
@@ -50,9 +51,23 @@ export const initBlogs = () => {
 }
 
 export const addBlog = (newBlog) => {
-  return  {
-    type: 'ADD_BLOG',
-    newBlog
+
+  return async (dispatch) => {
+
+    try {
+
+      const response = await blogService.submitNewBlog(newBlog)
+
+      dispatch({
+        type: 'ADD_BLOG',
+        newBlog: response
+      })
+      // Update users and set notification
+      dispatch(getUsers())
+      dispatch(notifyWithTimeout(`New post added!`, "notification-success"))
+    } catch (err) {
+        dispatch(notifyWithTimeout(`Adding post failed, ${err}`, "notification-error"))
+    }
   }
 }
 
@@ -88,6 +103,8 @@ export const removeBlog = (deletePostID) => {
               type: 'REMOVE_BLOG',
               deletePostID
             })
+            // Update users and set notification
+            dispatch(getUsers())
             dispatch(notifyWithTimeout('Post deleted successfully', "notification-success"))
         }
 

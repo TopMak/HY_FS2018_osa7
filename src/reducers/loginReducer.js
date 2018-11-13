@@ -39,6 +39,7 @@ export const setLoggedUser = (currentUser) => {
   }
 }
 
+// Get data for users view
 export const getUsers = () => {
   return async (dispatch) => {
     const users = await usersService.getAll()

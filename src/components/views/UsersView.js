@@ -1,29 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import usersService from '../../services/users'
 
 
 
-// const UsersView = (usersData) => {
+const UsersView = ({users}) => {
 
-class UsersView extends React.Component {
+// TODO Possible race condition with dispatches?
+// Maybe users get fetched before it's updated...
 
-  state = {
-    usersData: []
-  }
-
-  // Fetches always users from server when mounts
-  // Maybe use store instead?
-  componentDidMount(){
-
-    usersService
-      .getAll()
-      .then( usersData => this.setState({usersData}))
-
-  }
-
-  render(){
-    if(this.state.usersData.length > 0){
+    if(users.length > 0){
       // User name as key if names are unique
       return (
         <div className="usersView">
@@ -37,7 +24,7 @@ class UsersView extends React.Component {
           </thead>
             <tbody>
 
-              {this.state.usersData.map(user =>
+              {users.map(user =>
                 <tr key={user.id}>
                   <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
                   <td>{user.blogs.length}</td>
@@ -56,9 +43,15 @@ class UsersView extends React.Component {
         </div>
       )
     }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    users: state.login.users
   }
 }
 
-
-
-export default UsersView
+export default connect(
+  mapStateToProps,
+  null
+)(UsersView)
