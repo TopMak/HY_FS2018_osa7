@@ -24,7 +24,7 @@ import BlogView from './components/views/BlogView'
 // action imports
 import { notifyWithTimeout } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
-import { setLoggedUser, getUsers } from './reducers/loginReducer'
+import { setLoggedUser, loginUser, logoutUser, getUsers } from './reducers/loginReducer'
 
 //My services
 import blogService from './services/blogs'
@@ -39,14 +39,10 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // blogs: [],
       credidentials: {
         username: "",
         password: ""
-      },
-      // users: []
-      // ,
-      // loggedUser : null
+      }
     }
   }
 
@@ -56,20 +52,12 @@ class App extends React.Component {
 
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
 
-    // if(loggedInUserJSON === "undefined" || "null"){
-    //   // console.log("nullia tai undefined");
-    //   return window.localStorage.removeItem('loggedInUser')
-    // }
-
     if(loggedInUserJSON){
       const userData = JSON.parse(loggedInUserJSON)
       console.log(userData);
       this.props.setLoggedUser(userData)
       this.props.getUsers()
-      // this.setState({loggedUser: userData})
-      blogService.setToken(userData.token)
     }
-
   }
 
   /* -- Event listeners -- */
@@ -81,61 +69,26 @@ class App extends React.Component {
     })
   }
 
-  logoutHandler = (event) => {
-    //Clear the current user from app state and localStorage
-    window.localStorage.removeItem('loggedInUser')
-    //Clear the variable in blogService as well
-    blogService.setToken(null)
-    this.props.setLoggedUser('')
-    // this.setState( { loggedUser: null })
-    this.props.notifyWithTimeout("Logout!", "notification-success")
-  }
-
-
+  // TODO move this to LoginForm
   submitLogin = async (event) => {
 
     event.preventDefault()
-
-    //try-catch for login errors
-    try {
-
-      const loginData = await loginService.loginUser(this.state.credidentials)
-      blogService.setToken(loginData.token)
-      //console.log(loginData);
-      //If succesful login, set user information to localStorage
-      window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
-
-      this.setState({
-        credidentials: { username: "", password: "" }
-        // ,
-        // loggedUser: loginData
-      })
-      this.props.setLoggedUser(loginData)
-      this.props.notifyWithTimeout('Login success!', "notification-success")
-
-      //console.log(loginData)
-
-    } catch (err) {
-      //Maybe display errors to user via notifications? Now just console.log
-      console.log(err.response)
-      // console.log(err.status)
-      this.setState({ credidentials: { username: "", password: "" } })
-      this.props.notifyWithTimeout(`Login failed, ${err.response.data.error}`, "notification-error")
-    }
+    this.props.loginUser(this.state.credidentials)
+    this.setState({credidentials: { username: "", password: "" }})
   }
 
 
   render() {
     // TODO router switch currently kinda useless
     // TODO fix links to ids for switch
-    
+
     if(this.props.currentUser){
       return (
         <Router>
         <div>
         <Notification />
         <p>
-          Logged in as {this.props.currentUser.name} <button onClick={this.logoutHandler}>Logout</button>
+          Logged in as {this.props.currentUser.name} <button onClick={() => this.props.logoutUser()}>Logout</button>
         </p>
         <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
           <NewBlogForm toggle={this.blogForm} />
@@ -192,5 +145,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { initBlogs, notifyWithTimeout, setLoggedUser, getUsers }
+  { initBlogs, notifyWithTimeout, setLoggedUser, loginUser, logoutUser, getUsers }
 )(App)

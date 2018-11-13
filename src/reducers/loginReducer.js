@@ -1,4 +1,9 @@
 import usersService from '../services/users'
+import loginService from '../services/login'
+import blogService from '../services/blogs'
+
+// Other action creators
+import { notifyWithTimeout } from './notificationReducer'
 
 const initState= {currentUser: undefined, users:[]}
 
@@ -26,27 +31,50 @@ const loginReducer = (state = initState, action) => {
 
 // If valid login exists, set LoggedUser and get other users
 // Can be later changed eg. only for "admin users"
-export const setLoggedUser = (currentUser) => {
-
+export const loginUser = (credidentials) => {
   return async (dispatch) => {
-    dispatch({ type: 'SET_LOGGED_USER', currentUser })
     try {
-      const updatedBlog = await usersService.getAll()
-
+      const loginData = await loginService.loginUser(credidentials)
+      window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
+      blogService.setToken(loginData.token)
+      dispatch({ type: 'SET_LOGGED_USER', currentUser:loginData })
+      dispatch(getUsers())
+      dispatch(notifyWithTimeout('Login success!', "notification-success"))
     } catch (err) {
-      console.log(err);
+      // console.log(err.response)
+      // console.log(err.status)
+      dispatch(notifyWithTimeout(`Login failed, ${err.response.data.error}`, "notification-error"))
     }
   }
+}
+
+export const logoutUser = () => {
+  return async (dispatch) => {
+    window.localStorage.removeItem('loggedInUser')
+    blogService.setToken(null)
+    dispatch(setLoggedUser(''))
+    dispatch(notifyWithTimeout("See you next time!", "notification-success"))
+  }
+}
+
+//If credidentials are stored in window.localStorage
+export const setLoggedUser = (currentUser) => {
+  blogService.setToken(currentUser.token)
+  return { type: 'SET_LOGGED_USER', currentUser }
 }
 
 // Get data for users view
 export const getUsers = () => {
   return async (dispatch) => {
-    const users = await usersService.getAll()
-    dispatch({
-      type: 'SET_OTHER_USERS',
-      users
-    })
+    try {
+      const users = await usersService.getAll()
+      dispatch({
+        type: 'SET_OTHER_USERS',
+        users
+      })
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
