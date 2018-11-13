@@ -105,11 +105,12 @@ class App extends React.Component {
       //If succesful login, set user information to localStorage
       window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
 
-
       this.setState({
-        credidentials: { username: "", password: "" },
-        loggedUser: loginData
+        credidentials: { username: "", password: "" }
+        // ,
+        // loggedUser: loginData
       })
+      this.props.setLoggedUser(loginData)
       this.props.notifyWithTimeout('Login success!', "notification-success")
 
       //console.log(loginData)
@@ -123,11 +124,6 @@ class App extends React.Component {
     }
   }
 
-  userByID = (id) => {
-
-      console.log("USERS:",this.state.users);
-      this.props.users.find(a => a.id === id)
-  }
 
   render() {
 
@@ -135,7 +131,6 @@ class App extends React.Component {
 
 
       return (
-        <div>
         <Router>
         <div>
         <Notification />
@@ -156,7 +151,6 @@ class App extends React.Component {
               <BlogView id={match.params.id} />}/>
           </div>
         </Router>
-        </div>
       )
 
     } else {
@@ -172,8 +166,6 @@ class App extends React.Component {
   }
 }
 
-// <Route exact path="/users/:id" component={({match}) =>
-//     <UserView user={this.userByID(match.params.id)} />}/>
 
 const mapStateToProps = (state) => {
   return {

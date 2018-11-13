@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 // import Blog from '../Blog'
 
 const BlogsView = (props) => {
-  console.log(props);
+  // console.log(props);
   return (
     <div className="blogView">
       <h2>Blogs</h2>

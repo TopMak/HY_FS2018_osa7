@@ -2,7 +2,7 @@ const initState= {message:'', style: ''}
 
 
 const notificationReducer = (state = initState, action) => {
-  console.log('ACTION: ', action)
+  // console.log('ACTION: ', action)
   switch(action.type) {
 
   case 'SET_NOTIF': {
