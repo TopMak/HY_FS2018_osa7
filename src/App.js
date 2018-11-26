@@ -31,21 +31,15 @@ import { setLoggedUser, loginUser, logoutUser, getUsers } from './reducers/login
 // import loginService from './services/login'
 // import usersService from './services/users'
 
+// SUI components
+import { Container } from 'semantic-ui-react'
+
 //Styles
 import './semantic/dist/semantic.min.css';
 import './app.css';
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      credidentials: {
-        username: "",
-        password: ""
-      }
-    }
-  }
 
   componentDidMount() {
     //On mount, fetch blogs
@@ -61,22 +55,6 @@ class App extends React.Component {
     }
   }
 
-  /* -- Event listeners -- */
-  // TODO move this to LoginForm
-  loginFieldHandler = (event) => {
-    //Set state of credidentials, using spread syntax and computed values. Pretty c00l!!
-    this.setState({
-      credidentials: {...this.state.credidentials, [event.target.name]: event.target.value }
-    })
-  }
-
-  // TODO move this to LoginForm
-  submitLogin = async (event) => {
-
-    event.preventDefault()
-    this.props.loginUser(this.state.credidentials)
-    this.setState({credidentials: { username: "", password: "" }})
-  }
 
 
   render() {
@@ -85,44 +63,46 @@ class App extends React.Component {
 
     if(this.props.currentUser){
       return (
+
         <Router>
-        <div>
-        <Notification />
-        <p>
-          Logged in as {this.props.currentUser.name} <button onClick={() => this.props.logoutUser()}>Logout</button>
-        </p>
-        <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
-          <NewBlogForm toggle={this.blogForm} />
-        </Togglable>
-
-          <NavMenu />
-
-          <Switch>
-            <Route exact path="/" component={BlogsView}/>
-            <Route exact path="/users" component={UsersView}/>
-            <Route exact path="/users/:id" component={({match}) =>
-                <UserView id={match.params.id} />}/>
-            <Route exact path="/blogs/:id" component={({match, history}) =>
-                <BlogView history={history} id={match.params.id} />}/>
-            <Route component={NoMatch} />
-          </Switch>
+          <Container>
+          <div style={{position:"fixed"}}>
+            <Notification />
           </div>
+            <NavMenu />
+            <Switch>
+              <Route exact path="/" component={BlogsView}/>
+              <Route exact path="/users" component={UsersView}/>
+              <Route exact path="/users/:id" component={({match}) =>
+                  <UserView id={match.params.id} />}/>
+              <Route exact path="/blogs/:id" component={({match, history}) =>
+                  <BlogView history={history} id={match.params.id} />}/>
+              <Route component={NoMatch} />
+            </Switch>
+            <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
+              <NewBlogForm toggle={this.blogForm} />
+            </Togglable>
+          </Container>
         </Router>
+
       )
 
     } else {
 
       return (
-        <div className="loginFormPage-loggedout">
-          <Notification />
-          <LoginForm submitLogin={this.submitLogin} credidentials={this.state.credidentials} formInputHandler={this.loginFieldHandler}/>
-        </div>
+        <Container style={{ height: '100%' }}>
+          <LoginForm/>
+        </Container>
       )
     }
 
   }
 }
 
+// <div className="loginFormPage-loggedout">
+//   <Notification />
+//   <LoginForm/>
+// </div>
 
 const NoMatch = ({ location }) => {
   return (

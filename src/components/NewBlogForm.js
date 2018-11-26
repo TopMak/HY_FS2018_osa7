@@ -1,5 +1,9 @@
 import React from 'react'
 // import blogService from '../services/blogs'
+
+// SUI components
+import { Button, Form } from 'semantic-ui-react'
+
 // redux
 import { connect } from 'react-redux'
 
@@ -40,36 +44,30 @@ class NewBlogForm extends React.Component {
   render(){
     return (
 
-      <form onSubmit={this.submitBlog}>
-        <div>
-          tittle
-          <input
-            type="text"
-            name="title"
+      <Form onSubmit={this.submitBlog}>
+          <Form.Input fluid
+            name='title'
+            label='Title'
+            placeholder='Enter blog title'
             value={this.state.newBlog.title}
             onChange={this.formInputHandler}
           />
-        </div>
-        <div>
-          author
-          <input
-            type="text"
-            name="author"
+          <Form.Input fluid
+            name='author'
+            label='Author'
+            placeholder='Author of the blog'
             value={this.state.newBlog.author}
             onChange={this.formInputHandler}
           />
-        </div>
-        <div>
-          url
-          <input
-            type="text"
-            name="url"
+          <Form.Input fluid
+            name='url'
+            label='URL'
+            placeholder='link to the blog'
             value={this.state.newBlog.url}
             onChange={this.formInputHandler}
           />
-        </div>
-        <button type="submit">Submit blog</button>
-      </form>
+        <Button type='submit'>Submit</Button>
+      </Form>
 
     )
   }
