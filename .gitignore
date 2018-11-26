@@ -12,3 +12,7 @@ node_modules
 .testUsers
 
 .deletedSnippets
+
+
+#SemanticUI files
+/src/semantic/dist

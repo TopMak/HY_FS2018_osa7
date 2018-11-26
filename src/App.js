@@ -11,7 +11,7 @@ import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import Blog from './components/Blog'
+// import Blog from './components/Blog'
 import NavMenu from './components/NavMenu'
 
 // ViewComponents --> "pages"
@@ -27,11 +27,12 @@ import { initBlogs } from './reducers/blogReducer'
 import { setLoggedUser, loginUser, logoutUser, getUsers } from './reducers/loginReducer'
 
 //My services
-import blogService from './services/blogs'
-import loginService from './services/login'
-import usersService from './services/users'
+// import blogService from './services/blogs'
+// import loginService from './services/login'
+// import usersService from './services/users'
 
 //Styles
+import './semantic/dist/semantic.min.css';
 import './app.css';
 
 
@@ -61,7 +62,7 @@ class App extends React.Component {
   }
 
   /* -- Event listeners -- */
-
+  // TODO move this to LoginForm
   loginFieldHandler = (event) => {
     //Set state of credidentials, using spread syntax and computed values. Pretty c00l!!
     this.setState({
