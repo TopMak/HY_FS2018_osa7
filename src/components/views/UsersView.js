@@ -39,7 +39,7 @@ const UsersView = ({users}) => {
       // )
 
       return (
-        <Table>
+        <Table unstackable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Name</Table.HeaderCell>

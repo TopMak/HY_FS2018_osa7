@@ -21,12 +21,10 @@ const BlogsView = (props) => {
   //   </div>
   // )
   return (
-    <div>
     <Segment>
-    <h2>Blogs</h2>
-    <Card.Group>
+    <Card.Group centered>
         {props.blogs.map(blog =>
-          <Card key={blog.id}>
+          <Card raised key={blog.id}>
             <Card.Content as={Link} to={`/blogs/${blog.id}`}>
               <Card.Header>{blog.title}</Card.Header>
               <Card.Meta> {blog.likes} likes</Card.Meta>
@@ -36,7 +34,6 @@ const BlogsView = (props) => {
         )}
     </Card.Group>
     </Segment>
-    </div>
   )
 }
 

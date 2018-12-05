@@ -66,10 +66,11 @@ class App extends React.Component {
 
         <Router>
           <Container>
-          <div style={{position:'fixed', left: '50%', transform: 'translate(-50%, 2%)'}}>
-            <Notification />
-          </div>
+              <Notification />
             <NavMenu />
+            <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
+              <NewBlogForm toggle={this.blogForm} />
+            </Togglable>
             <Switch>
               <Route exact path="/" component={BlogsView}/>
               <Route exact path="/users" component={UsersView}/>
@@ -79,13 +80,14 @@ class App extends React.Component {
                   <BlogView history={history} id={match.params.id} />}/>
               <Route component={NoMatch} />
             </Switch>
-            <Togglable buttonLabel="New blog" ref={component => this.blogForm = component}>
-              <NewBlogForm toggle={this.blogForm} />
-            </Togglable>
           </Container>
         </Router>
 
       )
+
+      // <div style={{position:'fixed', left: '50%', transform: 'translate(-50%, 2%)'}}>
+      //   <Notification />
+      // </div>
 
     } else {
 

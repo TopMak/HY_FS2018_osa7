@@ -2,6 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+// SUI components
+import { Table } from 'semantic-ui-react'
+
 const UserView = ({users, id}) => {
 
   // console.log('USERVIEW',users);
@@ -17,20 +20,34 @@ const UserView = ({users, id}) => {
       )
     } else {
       return (
-        <div className="userView">
-          <h2>Blogs by {user.name}</h2>
-          <table>
-            <tbody>
-              {user.blogs.map(blog =>
-                <tr key={blog._id}><td>
-                <Link to={`/blogs/${blog._id}`}>{blog.title} by {blog.author}</Link>
-                </td></tr>
+        <Table unstackable>
 
-              )}
-            </tbody>
-          </table>
-        </div>
+          <Table.Body>
+            {user.blogs.map(blog =>
+              <Table.Row key={blog._id} >
+                <Table.Cell>
+                  <Link to={`/blogs/${blog._id}`}>{blog.title} by {blog.author}</Link>
+                </Table.Cell>
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table>
       )
+      // return (
+      //   <div className="userView">
+      //     <h2>Blogs by {user.name}</h2>
+      //     <table>
+      //       <tbody>
+      //         {user.blogs.map(blog =>
+      //           <tr key={blog._id}><td>
+      //           <Link to={`/blogs/${blog._id}`}>{blog.title} by {blog.author}</Link>
+      //           </td></tr>
+      //
+      //         )}
+      //       </tbody>
+      //     </table>
+      //   </div>
+      // )
     }
   }
   else {

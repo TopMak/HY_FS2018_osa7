@@ -7,7 +7,7 @@ import { notifyWithTimeout } from '../../reducers/notificationReducer'
 import Comments from '../Comments'
 
 // SUI components
-import { List, Icon, Button, Divider, Segment } from 'semantic-ui-react'
+import { List, Icon, Button, Divider, Segment, Popup } from 'semantic-ui-react'
 
 const BlogView = ({blogs, id, history, ...props}) => {
 
@@ -61,7 +61,10 @@ const BlogView = ({blogs, id, history, ...props}) => {
           <List.Item>
             <List.Icon name='linkify' />
             <List.Content>
-              <a href={blog.url} rel="noopener noreferrer" target="_blank">{blog.url} </a>
+              <Popup
+              trigger={<a href={blog.url} rel="noopener noreferrer" target="_blank">link</a>}
+              content={blog.url}
+              />
             </List.Content>
           </List.Item>
         </List>

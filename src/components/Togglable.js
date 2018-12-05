@@ -1,7 +1,7 @@
 import React from 'react'
 
 // SUI components
-import { Button } from 'semantic-ui-react'
+import { Button, Segment } from 'semantic-ui-react'
 
 
 class Togglable extends React.Component {
@@ -23,7 +23,7 @@ class Togglable extends React.Component {
 
 
     return (
-      <div>
+      <Segment>
         <div style={hideWhenVisible}>
           <Button onClick={this.toggleVisibility}>{this.props.buttonLabel}</Button>
         </div>
@@ -31,7 +31,7 @@ class Togglable extends React.Component {
           {this.props.children}
           <Button onClick={this.toggleVisibility}>Cancel</Button>
         </div>
-      </div>
+      </Segment>
     )
   }
 }

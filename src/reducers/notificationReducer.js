@@ -1,4 +1,4 @@
-const initState= {message:'', style: ''}
+const initState= {message:'', style: '', open: false}
 
 
 const notificationReducer = (state = initState, action) => {
@@ -6,7 +6,7 @@ const notificationReducer = (state = initState, action) => {
   switch(action.type) {
 
   case 'SET_NOTIF': {
-    const newNotification = { message: action.message, style: action.style }
+    const newNotification = { message: action.message, style: action.style, open: true }
     return newNotification
   }
   case 'CLEAR_NOTIF': {
