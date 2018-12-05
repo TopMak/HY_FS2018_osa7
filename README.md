@@ -10,6 +10,7 @@ Some components represents views and other components are parts of the views to 
 Reducers and action creators are divided to several functional categories. Most of the business logic resides there.
 
 App uses same backend created in task 4. (modified to support comments too)
+
 User creation is currently excluded from UI, but functionality exists in the backend.
 
 ### 🔧 Tech 🔧
