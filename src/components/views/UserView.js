@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 
 const UserView = ({users, id}) => {
 
-  console.log('USERVIEW',users);
+  // console.log('USERVIEW',users);
 
   const userByID = (users,id) => users.find(a => a.id === id)
   const user = userByID(users,id)
 
-  console.log('userByID',userByID);
+  // console.log('userByID',userByID);
   if(user) {
     if(user.blogs.length === 0) {
       return (

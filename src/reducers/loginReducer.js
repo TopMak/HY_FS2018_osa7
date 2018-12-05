@@ -35,6 +35,7 @@ export const loginUser = (credidentials) => {
   return async (dispatch) => {
     try {
       const loginData = await loginService.loginUser(credidentials)
+      // console.log(loginData);
       window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
       blogService.setToken(loginData.token)
       dispatch({ type: 'SET_LOGGED_USER', currentUser:loginData })
@@ -45,6 +46,17 @@ export const loginUser = (credidentials) => {
       // console.log(err.status)
       dispatch(notifyWithTimeout(`Login failed, ${err.response.data.error}`, "notification-error"))
     }
+  }
+}
+
+export const loginUserAnon = () => {
+  return async (dispatch) => {
+      const loginData = {username:'Anon', name:'Anonymous Viewer'}
+      window.localStorage.setItem('loggedInUser', JSON.stringify(loginData))
+      blogService.setToken(loginData.token)
+      dispatch({ type: 'SET_LOGGED_USER', currentUser:loginData })
+      dispatch(getUsers())
+      dispatch(notifyWithTimeout('Login success!', "notification-success"))
   }
 }
 

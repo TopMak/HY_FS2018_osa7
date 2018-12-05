@@ -66,7 +66,7 @@ class App extends React.Component {
 
         <Router>
           <Container>
-          <div style={{position:"fixed"}}>
+          <div style={{position:'fixed', left: '50%', transform: 'translate(-50%, 2%)'}}>
             <Notification />
           </div>
             <NavMenu />
@@ -90,19 +90,22 @@ class App extends React.Component {
     } else {
 
       return (
-        <Container style={{ height: '100%' }}>
-          <LoginForm/>
-        </Container>
+          <Container style={{ height: '100%' }}>
+            <LoginForm/>
+          </Container>
       )
+
+      // return (
+      //   // <div className="loginFormPage-loggedout">
+      //   //   <Notification />
+      //   //   <LoginForm/>
+      //   // </div>
+      // )
     }
 
   }
 }
 
-// <div className="loginFormPage-loggedout">
-//   <Notification />
-//   <LoginForm/>
-// </div>
 
 const NoMatch = ({ location }) => {
   return (

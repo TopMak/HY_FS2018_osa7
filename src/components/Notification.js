@@ -15,13 +15,13 @@ const Notification = ({ notification }) => {
       )
   } else if (notification.style === 'notification-success') {
     return (
-        <Message attached success >
+        <Message  success >
           <Message.Header>{notification.message}</Message.Header>
         </Message>
     )
   } else if (notification.style === 'notification-error') {
     return (
-        <Message attached negative >
+        <Message  negative >
           <Message.Header>{notification.message}</Message.Header>
         </Message>
     )

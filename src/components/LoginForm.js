@@ -1,10 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 // redux
 import { connect } from 'react-redux'
 
-import { loginUser } from '../reducers/loginReducer'
+import { loginUser, loginUserAnon } from '../reducers/loginReducer'
 
 import Notification from './Notification'
 // SUI components
@@ -71,7 +71,7 @@ class LoginForm extends React.Component {
               <Grid.Column style={{ maxWidth: 450 }}>
               <Notification />
                 <Form onSubmit={this.submitLogin} size='large'>
-                  <Segment>
+                  <Segment raised>
                       <Form.Input fluid
                         type='text'
                         name='username'
@@ -91,6 +91,7 @@ class LoginForm extends React.Component {
                         onChange={this.loginFieldHandler}
                       />
                     <Button type='submit'>Login</Button>
+                    <Button onClick={() => this.props.loginUserAnon()}> Login as Anon</Button>
                   </Segment>
                 </Form>
               </Grid.Column>
@@ -140,5 +141,5 @@ class LoginForm extends React.Component {
 
 export default connect(
   null,
-  { loginUser }
+  { loginUser, loginUserAnon }
 )(LoginForm)

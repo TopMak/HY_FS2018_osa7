@@ -66,7 +66,8 @@ export const addBlog = (newBlog) => {
       dispatch(getUsers())
       dispatch(notifyWithTimeout(`New post added!`, "notification-success"))
     } catch (err) {
-        dispatch(notifyWithTimeout(`Adding post failed, ${err}`, "notification-error"))
+        console.log(err.response);
+        dispatch(notifyWithTimeout(`Adding post failed, ${err.response.statusText}`, "notification-error"))
     }
   }
 }
@@ -91,10 +92,11 @@ export const likeBlog = (updatedBlogID) => {
 
 export const removeBlog = (deletePostID) => {
   return async (dispatch, getState) => {
-    const blogs = getState().blogs
-    const blogTitle = blogs.find(n => n.id === deletePostID).title
+    // const blogs = getState().blogs
+    // const blogTitle = blogs.find(n => n.id === deletePostID).title
     try {
-      if (window.confirm(`Do you really wanna delete ${blogTitle} ?`)){
+      // NOTE Moved confirmation from here to blogView
+      // if (window.confirm(`Do you really wanna delete ${blogTitle} ?`)){
 
         const response = await blogService.deleteBlogByID(deletePostID)
 
@@ -107,8 +109,8 @@ export const removeBlog = (deletePostID) => {
             dispatch(getUsers())
             dispatch(notifyWithTimeout('Post deleted successfully', "notification-success"))
         }
-
-      } else dispatch(notifyWithTimeout('Deleting cancelled!', "notification-success"));
+      // NOTE Moved confirmation from here to blogView
+      // } else dispatch(notifyWithTimeout('Deleting cancelled!', "notification-success"));
 
     } catch (err) {
       dispatch(notifyWithTimeout(`Delete failed, ${err}`, "notification-error"))

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 // SUI components
-import { Card } from 'semantic-ui-react'
+import { Card, Segment } from 'semantic-ui-react'
 
 // components
 // import Blog from '../Blog'
@@ -22,6 +22,7 @@ const BlogsView = (props) => {
   // )
   return (
     <div>
+    <Segment>
     <h2>Blogs</h2>
     <Card.Group>
         {props.blogs.map(blog =>
@@ -34,6 +35,7 @@ const BlogsView = (props) => {
           </Card>
         )}
     </Card.Group>
+    </Segment>
     </div>
   )
 }

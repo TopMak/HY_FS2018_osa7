@@ -2,7 +2,7 @@ import React from 'react'
 // import blogService from '../services/blogs'
 
 // SUI components
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form, Segment } from 'semantic-ui-react'
 
 // redux
 import { connect } from 'react-redux'
@@ -43,7 +43,7 @@ class NewBlogForm extends React.Component {
 
   render(){
     return (
-
+      <Segment>
       <Form onSubmit={this.submitBlog}>
           <Form.Input fluid
             name='title'
@@ -68,6 +68,7 @@ class NewBlogForm extends React.Component {
           />
         <Button type='submit'>Submit</Button>
       </Form>
+      </Segment>
 
     )
   }
