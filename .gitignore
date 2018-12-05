@@ -5,6 +5,10 @@ db.json
 #Folders
 node_modules
 
+#Deploy files
+build
+deploy.sh
+
 #Files
 .env
 .eslintignore
